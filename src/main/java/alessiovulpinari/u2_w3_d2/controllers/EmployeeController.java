@@ -2,15 +2,11 @@ package alessiovulpinari.u2_w3_d2.controllers;
 
 
 import alessiovulpinari.u2_w3_d2.entities.Employee;
-import alessiovulpinari.u2_w3_d2.exceptions.BadRequestException;
 import alessiovulpinari.u2_w3_d2.payloads.EmployeePayload;
-import alessiovulpinari.u2_w3_d2.payloads.EmployeePayloadResponse;
 import alessiovulpinari.u2_w3_d2.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
