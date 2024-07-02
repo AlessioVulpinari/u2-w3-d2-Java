@@ -45,6 +45,7 @@ public class Employee implements UserDetails {
     @Column(name = "url_avatar", nullable = false)
     private String avatarUrl;
 
+    @Column(name = "ruolo", nullable = false)
     @Enumerated(EnumType.STRING)
     private EmployeeRole role;
 

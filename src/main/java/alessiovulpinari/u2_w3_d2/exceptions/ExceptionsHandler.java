@@ -2,6 +2,7 @@ package alessiovulpinari.u2_w3_d2.exceptions;
 
 import alessiovulpinari.u2_w3_d2.payloads.ErrorPayload;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ExceptionsHandler {
 
+    // Errore 400
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorPayload handleBadRequest(BadRequestException err) {
@@ -24,6 +26,22 @@ public class ExceptionsHandler {
         }
     }
 
+    // Errore 401
+    @ExceptionHandler(UnathorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorPayload handleUnauthorized(UnathorizedException err) {
+        return new ErrorPayload(err.getMessage(), LocalDateTime.now());
+    }
+
+    // Errore 403
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorPayload handleForbidden(AuthorizationDeniedException ex) {
+        return new ErrorPayload("Non hai accesso a questa funzionalità", LocalDateTime.now());
+    }
+
+
+    // Errore 404
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorPayload handleNotFound (NotFoundException err) {

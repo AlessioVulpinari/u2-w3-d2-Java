@@ -10,6 +10,7 @@ import alessiovulpinari.u2_w3_d2.services.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +24,14 @@ public class DeviceController {
     private DeviceService deviceService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Page<Device> getAllDevices(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size)
     {
         return this.deviceService.getDevices(page, size);
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public DevicePayloadResponse saveDevice(@RequestBody @Validated NewDevicePayload body, BindingResult result) {
         if (result.hasErrors()) {
@@ -39,23 +42,27 @@ public class DeviceController {
     }
 
     @GetMapping("/{deviceId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Device findById(@PathVariable UUID deviceId)
     {
         return this.deviceService.findById(deviceId);
     }
 
     @PutMapping("/{deviceId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Device findByIdAndUpdate(@PathVariable UUID deviceId, @RequestBody NewDevicePayload body) {
         return this.deviceService.findByIdAndUpdate(deviceId, body);
     }
 
     @DeleteMapping("/{deviceId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable UUID deviceId) {
         this.deviceService.findByIdAndDelete(deviceId);
     }
 
     @PatchMapping("/{deviceId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Device updateEmployeeId(@PathVariable UUID deviceId, @RequestBody DeviceEmployeePayload body) {
         return this.deviceService.findByIdAndUpdateEmployee(deviceId, body);
     }

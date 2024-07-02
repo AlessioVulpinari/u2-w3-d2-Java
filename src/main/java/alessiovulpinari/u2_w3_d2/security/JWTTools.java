@@ -35,4 +35,10 @@ public class JWTTools {
         }
     }
 
+    // Funzione per estrarre l'Id da un Token
+    public String extractIdFromToken(String token){
+        return Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build()
+                .parseSignedClaims(token).getPayload().getSubject(); // Questo è l'id dell'utente
+    }
+
 }

@@ -7,6 +7,7 @@ import alessiovulpinari.u2_w3_d2.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Page<Employee> getAllEmployees(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size)
     {
         return this.employeeService.getEmployees(page, size);
@@ -28,23 +30,27 @@ public class EmployeeController {
 
 
     @GetMapping("/{employeeId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Employee findById(@PathVariable UUID employeeId)
     {
         return this.employeeService.findById(employeeId);
     }
 
     @PutMapping("/{employeeId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Employee findByIdAndUpdate(@PathVariable UUID employeeId, @RequestBody EmployeePayload body) {
         return this.employeeService.findByIdAndUpdate(employeeId, body);
     }
 
     @DeleteMapping("/{employeeId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findByIdAndDelete(@PathVariable UUID employeeId) {
         this.employeeService.findByIdAndDelete(employeeId);
     }
 
     @PatchMapping("/{employeeId}/avatar")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Employee uploadAvatar(@PathVariable UUID employeeId, @RequestParam("avatar")MultipartFile image) throws IOException {
         String url = employeeService.uploadAvatar(image);
         return this.employeeService.patchAvatar(employeeId, url);
