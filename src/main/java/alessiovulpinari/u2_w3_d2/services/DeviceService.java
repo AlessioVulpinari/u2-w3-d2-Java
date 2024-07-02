@@ -2,6 +2,7 @@ package alessiovulpinari.u2_w3_d2.services;
 
 
 import alessiovulpinari.u2_w3_d2.entities.Device;
+import alessiovulpinari.u2_w3_d2.entities.Employee;
 import alessiovulpinari.u2_w3_d2.enums.DeviceStatus;
 import alessiovulpinari.u2_w3_d2.enums.DeviceType;
 import alessiovulpinari.u2_w3_d2.exceptions.BadRequestException;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -62,6 +64,10 @@ public class DeviceService {
         Device found = findById(deviceId);
         found.setEmployee(this.employeeService.findById(body.employeeId()));
         return this.deviceRepository.save(found);
+    }
+
+    public List<Device> findByEmployee(Employee employee) {
+       return this.deviceRepository.findByEmployee(employee);
     }
 
     private static DeviceType convertStringToDeviceType(String type) {

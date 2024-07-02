@@ -2,6 +2,7 @@ package alessiovulpinari.u2_w3_d2.controllers;
 
 
 import alessiovulpinari.u2_w3_d2.entities.Device;
+import alessiovulpinari.u2_w3_d2.entities.Employee;
 import alessiovulpinari.u2_w3_d2.exceptions.BadRequestException;
 import alessiovulpinari.u2_w3_d2.payloads.DeviceEmployeePayload;
 import alessiovulpinari.u2_w3_d2.payloads.DevicePayloadResponse;
@@ -11,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,6 +25,12 @@ import java.util.UUID;
 public class DeviceController {
     @Autowired
     private DeviceService deviceService;
+
+    @GetMapping("/me")
+    public List<Device> getAllMyDevices(@AuthenticationPrincipal Employee currentAuthenticatedEmployee)
+    {
+        return this.deviceService.findByEmployee(currentAuthenticatedEmployee);
+    }
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")

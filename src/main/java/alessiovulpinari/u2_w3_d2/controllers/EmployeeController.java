@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,13 +22,22 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    @GetMapping("/me")
+    public Employee getProfile(@AuthenticationPrincipal Employee currentAuthenticatedEmployee){
+        return currentAuthenticatedEmployee;
+    }
+
+    @PutMapping("/me")
+    public Employee updateProfile(@AuthenticationPrincipal Employee currentAuthenticatedEmployee, @RequestBody EmployeePayload body){
+        return this.employeeService.findByIdAndUpdate(currentAuthenticatedEmployee.getEmployeeId(), body);
+    }
+
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public Page<Employee> getAllEmployees(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size)
     {
         return this.employeeService.getEmployees(page, size);
     }
-
 
     @GetMapping("/{employeeId}")
     @PreAuthorize("hasAuthority('ADMIN')")

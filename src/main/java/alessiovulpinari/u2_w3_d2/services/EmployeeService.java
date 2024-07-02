@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,9 @@ public class EmployeeService {
 
     @Autowired
     private Cloudinary cloudinary;
+
+    @Autowired
+    private PasswordEncoder bcrypt;
 
     @Autowired
     private EmployeeRepository employeeRepository;
@@ -41,7 +45,7 @@ public class EmployeeService {
         this.employeeRepository.findByUsername(body.username()).ifPresent(employee -> {
             throw new BadRequestException("Esiste già un impiegato con questo username: " + body.username());});
 
-        Employee newEmployee = new Employee(body.username(), body.firstName(), body.LastName(), body.email(), body.password());
+        Employee newEmployee = new Employee(body.username(), body.firstName(), body.LastName(), body.email(), bcrypt.encode(body.password()));
         return employeeRepository.save(newEmployee);
     }
 
